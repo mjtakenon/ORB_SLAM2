@@ -18,7 +18,7 @@
 * along with ORB-SLAM2. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <unistd.h>
+
 
 #include "System.h"
 #include "Converter.h"
@@ -487,6 +487,10 @@ vector<cv::KeyPoint> System::GetTrackedKeyPointsUn()
 {
     unique_lock<mutex> lock(mMutexState);
     return mTrackedKeyPointsUn;
+}
+
+Map* System::getMap() {
+    return mpMap;
 }
 
 } //namespace ORB_SLAM
