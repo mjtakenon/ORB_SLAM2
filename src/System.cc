@@ -493,4 +493,38 @@ Map* System::getMap() {
     return mpMap;
 }
 
+void System::WritePoint() {
+
+    cout << "Write point" << endl;
+    
+    vector<ORB_SLAM2::MapPoint*> allMapPoints = mpMap->GetAllMapPoints();
+	// cout << "# size=" << allMapPoints.size() << endl;
+	// cout << "# x,y,z" << endl;
+    typedef vector<array<double, 3 > > Cloud;
+    Cloud points;
+
+	for (auto p : allMapPoints) {
+		Eigen::Matrix<double, 3, 1> v = ORB_SLAM2::Converter::toVector3d(p->GetWorldPos());
+		// cout << v.x() << "," << v.y() << "," << v.z() << endl;
+        array<double,3> arr = {v.x(),v.y(),v.z()};
+        points.push_back(arr);
+	}
+
+    plycpp::PLYData plyData;
+    plycpp::fromPointCloud<double,Cloud>(points,plyData);
+    string filename = "point_cloud_ascii.ply";
+    plycpp::save(filename, plyData, plycpp::FileFormat::ASCII);
+}
+
+void System::WriteKeyframe() {
+
+    cout << "Write Keyframes" << endl;
+
+    auto allKeyFrames = mpMap->GetAllKeyFrames();
+    
+	for (auto p : allKeyFrames) {
+        cout << p->GetPose() << endl;
+	}
+}
+
 } //namespace ORB_SLAM

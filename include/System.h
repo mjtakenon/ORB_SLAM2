@@ -35,6 +35,7 @@
 #include "KeyFrameDatabase.h"
 #include "ORBVocabulary.h"
 #include "Viewer.h"
+#include "plycpp.h"
 
 namespace ORB_SLAM2
 {
@@ -123,6 +124,11 @@ public:
     std::vector<cv::KeyPoint> GetTrackedKeyPointsUn();
 
     Map* getMap();
+
+    // 点群の出力
+    void WritePoint();
+    // キーフレームの出力
+    void WriteKeyframe();
     
 private:
 
