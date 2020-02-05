@@ -1,0 +1,22 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "ORB-SLAM Build",
+      "type": "shell",
+      "command": "/bin/bash build.sh",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "ORB-SLAM Exec",
+      "type": "shell",
+      "command": "./Examples/Monocular/mono_euroc ./Vocabulary/ORBvoc.txt /mnt/c/Users/mjtak/Videos/data/heli0/settings.yaml /mnt/c/Users/mjtak/Videos/data/heli0/images /mnt/c/Users/mjtak/Videos/data/heli0/timestamp_short.txt",
+      "group": "test"
+    }
+  ]
+}
