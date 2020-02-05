@@ -35,7 +35,7 @@ FrameDrawer::FrameDrawer(Map* pMap):mpMap(pMap)
     mIm = cv::Mat(480,640,CV_8UC3, cv::Scalar(0,0,0));
 }
 
-cv::Mat FrameDrawer::DrawFrame()
+cv::Mat FrameDrawer::DrawFrame(std::string filePath = "")
 {
     cv::Mat im;
     vector<cv::KeyPoint> vIniKeys; // Initialization: KeyPoints in reference frame
@@ -120,13 +120,13 @@ cv::Mat FrameDrawer::DrawFrame()
     }
 
     cv::Mat imWithInfo;
-    DrawTextInfo(im,state, imWithInfo);
+    DrawTextInfo(im, state, imWithInfo, filePath);
 
     return imWithInfo;
 }
 
 
-void FrameDrawer::DrawTextInfo(cv::Mat &im, int nState, cv::Mat &imText)
+void FrameDrawer::DrawTextInfo(cv::Mat &im, int nState, cv::Mat &imText, std::string filePath = "")
 {
     stringstream s;
     if(nState==Tracking::NO_IMAGES_YET)
@@ -154,9 +154,13 @@ void FrameDrawer::DrawTextInfo(cv::Mat &im, int nState, cv::Mat &imText)
         s << " LOADING ORB VOCABULARY. PLEASE WAIT...";
     }
 
+    s << " " << filePath;
+
+        // print image
+        // cout << vstrImageFilenames[ni] << endl;
     int baseline=0;
     cv::Size textSize = cv::getTextSize(s.str(),cv::FONT_HERSHEY_PLAIN,1,1,&baseline);
-
+    
     // テキストの分余白をとった画像行列を生成
     imText = cv::Mat(im.rows+textSize.height+10,im.cols,im.type());
     // 画像から画素をコピー

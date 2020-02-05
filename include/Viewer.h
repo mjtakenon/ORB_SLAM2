@@ -28,6 +28,7 @@
 #include "System.h"
 
 #include <mutex>
+#include <string>
 
 namespace ORB_SLAM2
 {
@@ -80,7 +81,6 @@ private:
     bool mbStopped;
     bool mbStopRequested;
     std::mutex mMutexStop;
-
 };
 
 }

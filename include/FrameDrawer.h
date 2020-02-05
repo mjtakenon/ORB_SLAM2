@@ -29,6 +29,7 @@
 #include<opencv2/features2d/features2d.hpp>
 
 #include<mutex>
+#include<string>
 
 
 namespace ORB_SLAM2
@@ -46,11 +47,11 @@ public:
     void Update(Tracking *pTracker);
 
     // Draw last processed frame.
-    cv::Mat DrawFrame();
+    cv::Mat DrawFrame(std::string filePath);
 
 protected:
 
-    void DrawTextInfo(cv::Mat &im, int nState, cv::Mat &imText);
+    void DrawTextInfo(cv::Mat &im, int nState, cv::Mat &imText, std::string filePath);
 
     // Info of the frame to be drawn
     cv::Mat mIm;

@@ -76,6 +76,7 @@ public:
     // Proccess the given monocular frame
     // Input images: RGB (CV_8UC3) or grayscale (CV_8U). RGB is converted to grayscale.
     // Returns the camera pose (empty if tracking fails).
+    cv::Mat TrackMonocular(const cv::Mat &im, const double &timestamp, const string filePath);
     cv::Mat TrackMonocular(const cv::Mat &im, const double &timestamp);
 
     // This stops local mapping thread (map building) and performs only camera tracking.
@@ -129,6 +130,8 @@ public:
     void WritePoint();
     // キーフレームの出力
     void WriteKeyframe();
+
+    std::string getFilePath();
     
 private:
 
@@ -182,6 +185,9 @@ private:
     std::vector<MapPoint*> mTrackedMapPoints;
     std::vector<cv::KeyPoint> mTrackedKeyPointsUn;
     std::mutex mMutexState;
+
+    // 画像ファイルパス
+    std::string mstrFilePath;
 };
 
 }// namespace ORB_SLAM
