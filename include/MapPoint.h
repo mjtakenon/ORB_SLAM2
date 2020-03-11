@@ -27,6 +27,7 @@
 
 #include<opencv2/core/core.hpp>
 #include<mutex>
+#include<array>
 
 namespace ORB_SLAM2
 {
@@ -111,6 +112,8 @@ public:
 
 
     static std::mutex mGlobalMutex;
+
+    std::array<unsigned char,3> mColor;
 
 protected:    
 

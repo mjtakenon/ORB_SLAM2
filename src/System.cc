@@ -560,16 +560,20 @@ void System::WritePoint() {
 	// cout << "# x,y,z" << endl;
     typedef vector<array<double, 3 > > Cloud;
     Cloud points;
+    Cloud colors;
 
 	for (auto p : allMapPoints) {
 		Eigen::Matrix<double, 3, 1> v = ORB_SLAM2::Converter::toVector3d(p->GetWorldPos());
 		// cout << v.x() << "," << v.y() << "," << v.z() << endl;
-        array<double,3> arr = {v.x(),v.y(),v.z()};
-        points.push_back(arr);
+        // p->mColor[0],p->mColor[1],p->mColor[2]
+        std::array<double,3> pos = {v.x(),v.y(),v.z()};
+        std::array<double,3> clr = {p->mColor[0],p->mColor[1],p->mColor[2]};
+        points.push_back(pos);
+        colors.push_back(clr);
 	}
 
     plycpp::PLYData plyData;
-    plycpp::fromPointCloud<double,Cloud>(points,plyData);
+    plycpp::fromPointCloudColor<double,Cloud>(points,colors,plyData);
     string filename = "point_cloud_ascii.ply";
     plycpp::save(filename, plyData, plycpp::FileFormat::ASCII);
 }

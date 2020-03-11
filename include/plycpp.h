@@ -28,6 +28,7 @@
 #include <cassert>
 #include <algorithm>
 #include <typeindex>
+#include <iostream>
 
 
 namespace plycpp
@@ -298,6 +299,33 @@ namespace plycpp
 		vertex->properties.push_back("x", positionProperties[0]);
 		vertex->properties.push_back("y", positionProperties[1]);
 		vertex->properties.push_back("z", positionProperties[2]);
+
+		plyData.push_back("vertex", vertex);
+	}
+
+	template<typename T, typename Cloud>
+	void fromPointCloudColor(const Cloud& points, const Cloud& colors, PLYData& plyData)
+	{
+		const size_t size = points.size();
+
+		if (size != colors.size())
+			throw Exception("Inconsistent size");
+
+		plyData.clear();
+
+		std::vector<std::shared_ptr<PropertyArray> > positionProperties(3);
+		unpackProperties<T, Cloud>(points, positionProperties);
+
+		std::vector<std::shared_ptr<PropertyArray> > colorProperties(3);
+		unpackProperties<T, Cloud>(colors, colorProperties);
+
+		std::shared_ptr<ElementArray> vertex(new ElementArray(size));
+		vertex->properties.push_back("x", positionProperties[0]);
+		vertex->properties.push_back("y", positionProperties[1]);
+		vertex->properties.push_back("z", positionProperties[2]);
+		vertex->properties.push_back("red", 	colorProperties[0]);
+		vertex->properties.push_back("green", colorProperties[1]);
+		vertex->properties.push_back("blue", 	colorProperties[2]);
 
 		plyData.push_back("vertex", vertex);
 	}

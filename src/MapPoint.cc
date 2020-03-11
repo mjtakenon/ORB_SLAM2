@@ -41,6 +41,10 @@ MapPoint::MapPoint(const cv::Mat &Pos, KeyFrame *pRefKF, Map* pMap):
     // MapPoints can be created from Tracking and Local Mapping. This mutex avoid conflicts with id.
     unique_lock<mutex> lock(mpMap->mMutexPointCreation);
     mnId=nNextId++;
+
+    for(int i = 0; i < 3; ++i) {
+        mColor[i] = 255;
+    }
 }
 
 MapPoint::MapPoint(const cv::Mat &Pos, Map* pMap, Frame* pFrame, const int &idxF):
@@ -68,6 +72,10 @@ MapPoint::MapPoint(const cv::Mat &Pos, Map* pMap, Frame* pFrame, const int &idxF
     // MapPoints can be created from Tracking and Local Mapping. This mutex avoid conflicts with id.
     unique_lock<mutex> lock(mpMap->mMutexPointCreation);
     mnId=nNextId++;
+    
+    for(int i = 0; i < 3; ++i) {
+        mColor[i] = 255;
+    }
 }
 
 void MapPoint::SetWorldPos(const cv::Mat &Pos)
@@ -75,6 +83,8 @@ void MapPoint::SetWorldPos(const cv::Mat &Pos)
     unique_lock<mutex> lock2(mGlobalMutex);
     unique_lock<mutex> lock(mMutexPos);
     Pos.copyTo(mWorldPos);
+
+    mColor[0] = 0;
 }
 
 cv::Mat MapPoint::GetWorldPos()

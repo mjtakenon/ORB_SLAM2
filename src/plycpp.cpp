@@ -576,6 +576,8 @@ namespace plycpp
 			break;
 		}
 
+    std::cout << "ok" << std::endl;
+
 		// Iterate over elements array
 		for (const auto& elementArrayTuple : data)
 		{
@@ -604,8 +606,15 @@ namespace plycpp
 					{
 						throw Exception("Inconsistent size for " + elementArrayName + " -- " + propName);
 					}
-
-					fout << "property " << itTypeName->second << " " << propName << std::endl;
+					// color
+					if (propName == "red" || propName == "blue" || propName == "green") 
+					{
+						fout << "property " << "uchar" << " " << propName << std::endl;
+					}
+					else
+					{
+						fout << "property " << itTypeName->second << " " << propName << std::endl;
+					}
 				}
 				else
 				{
