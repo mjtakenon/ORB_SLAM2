@@ -575,7 +575,7 @@ void System::WritePoint() {
     plycpp::PLYData plyData;
     // plycpp::fromPointCloudColor<double,Cloud>(points,plyData);
     plycpp::fromPointCloud<double,Cloud>(points,plyData);
-    string filename = "pointcloud_worldpos.ply";
+    string filename = "heli0_short_worldpos.ply";
     plycpp::save(filename, plyData, plycpp::FileFormat::ASCII);
 
     cout << "Done." << endl;
@@ -585,20 +585,21 @@ void System::WriteKeyframe() {
 
     cout << "Writing keyframes..." << endl;
 
-    auto allKeyFrames = mpMap->GetAllKeyFrames();
+    std::vector<ORB_SLAM2::KeyFrame *> allKeyFrames = mpMap->GetAllKeyFrames();
 
     typedef vector<array<double, 3 > > Cloud;
     Cloud points;
     
 	for (auto kf : allKeyFrames) {
-        auto p = kf->GetCameraCenter();
-        std::array<double,3> pos = {p.at<double>(0), p.at<double>(1), p.at<double>(2)};
+        cv::Mat_<double> cameraPose = kf->GetPoseInverse();
+        // cout << cameraPose << endl;
+        std::array<double,3> pos = {cameraPose.at<double>(0, 3),cameraPose.at<double>(1, 3),cameraPose.at<double>(2, 3)};
         points.push_back(pos);
 	}
     
     plycpp::PLYData plyData;
     plycpp::fromPointCloud<double,Cloud>(points,plyData);
-    string filename = "pointcloud_camerapos.ply";
+    string filename = "heli0_short_camerapos.ply";
     plycpp::save(filename, plyData, plycpp::FileFormat::ASCII);
     cout << "Done." << endl;
 }
