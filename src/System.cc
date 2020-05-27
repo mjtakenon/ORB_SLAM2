@@ -553,40 +553,54 @@ Map* System::getMap() {
 
 void System::WritePoint() {
 
-    cout << "Write point" << endl;
+    cout << "Writing points..." << endl;
     
     vector<ORB_SLAM2::MapPoint*> allMapPoints = mpMap->GetAllMapPoints();
 	// cout << "# size=" << allMapPoints.size() << endl;
 	// cout << "# x,y,z" << endl;
     typedef vector<array<double, 3 > > Cloud;
     Cloud points;
-    Cloud colors;
+    // Cloud colors;
 
 	for (auto p : allMapPoints) {
 		Eigen::Matrix<double, 3, 1> v = ORB_SLAM2::Converter::toVector3d(p->GetWorldPos());
 		// cout << v.x() << "," << v.y() << "," << v.z() << endl;
         // p->mColor[0],p->mColor[1],p->mColor[2]
         std::array<double,3> pos = {v.x(),v.y(),v.z()};
-        std::array<double,3> clr = {p->mColor[0],p->mColor[1],p->mColor[2]};
+        // std::array<double,3> clr = {p->mColor[0],p->mColor[1],p->mColor[2]};
         points.push_back(pos);
-        colors.push_back(clr);
+        // colors.push_back(clr);
 	}
 
     plycpp::PLYData plyData;
-    plycpp::fromPointCloudColor<double,Cloud>(points,colors,plyData);
-    string filename = "point_cloud_ascii.ply";
+    // plycpp::fromPointCloudColor<double,Cloud>(points,plyData);
+    plycpp::fromPointCloud<double,Cloud>(points,plyData);
+    string filename = "pointcloud_worldpos.ply";
     plycpp::save(filename, plyData, plycpp::FileFormat::ASCII);
+
+    cout << "Done." << endl;
 }
 
 void System::WriteKeyframe() {
 
-    cout << "Write Keyframes" << endl;
+    cout << "Writing keyframes..." << endl;
 
     auto allKeyFrames = mpMap->GetAllKeyFrames();
+
+    typedef vector<array<double, 3 > > Cloud;
+    Cloud points;
     
-	for (auto p : allKeyFrames) {
-        cout << p->GetPose() << endl;
+	for (auto kf : allKeyFrames) {
+        auto p = kf->GetCameraCenter();
+        std::array<double,3> pos = {p.at<double>(0), p.at<double>(1), p.at<double>(2)};
+        points.push_back(pos);
 	}
+    
+    plycpp::PLYData plyData;
+    plycpp::fromPointCloud<double,Cloud>(points,plyData);
+    string filename = "pointcloud_camerapos.ply";
+    plycpp::save(filename, plyData, plycpp::FileFormat::ASCII);
+    cout << "Done." << endl;
 }
 
 std::string System::getFilePath() 
